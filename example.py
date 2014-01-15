@@ -2,16 +2,16 @@ from base import *
 
 # Declare aspects.
 
-observer = Aspect()
+logger = Aspect()
 
 # Write function definitions.
 
-@observer.aop
+@logger.track
 def f1(x, y):
     """A trivial addition function."""
     return x + y
 
-@observer.aop
+@logger.track
 def f2(x, y, z):
     """Another trivial addition function."""
     return f1(f1(x, y), z)
@@ -21,8 +21,8 @@ def f2(x, y, z):
 def log1():
     print "addition function logged"
 
-observer.pointcut("addition", [f1, f2])
-observer.advice(AFTER, "addition", log1)
+logger.define("addition", [f1, f2])
+logger.after("addition", log1)
 
 # Write execution code.
 

@@ -2,9 +2,9 @@
 
 Using this AOP implementation:
     
-    Use the aop() method of an Aspect instance as a decorator on the functions
-    you wish to be included in pointcuts. Write function definitions so that
-    the beginning and end of their executions can be tracked.
+    Use the track() method of an Aspect instance as a decorator on the
+    functions you wish to be included in pointcuts. Write function definitions
+    so that the beginning and end of their executions can be tracked.
 
     See example.py for a complete example.
 
@@ -58,8 +58,8 @@ class Aspect(object):
             AFTER: {}
         }
 
-    def pointcut(self, name, fs):
-        """Add a pointcut.
+    def define(self, name, fs):
+        """Define a pointcut.
 
         Arguments:
             name - a string representing the pointcut
@@ -71,8 +71,8 @@ class Aspect(object):
 
         self.pointcuts[name] = joinpoints
 
-    def advice(self, rel, ptc, f):
-        """Add an advice.
+    def advise(self, rel, ptc, f):
+        """Define an advice.
 
         Arguments:
             rel - when to execute f in relation to ptc
@@ -85,7 +85,13 @@ class Aspect(object):
         else:
             raise ValueError
 
-    def aop(self, f):
+    def before(self, ptc, f):
+        self.advise(BEFORE, ptc, f)
+
+    def after(self, ptc, f):
+        self.advise(AFTER, ptc, f)
+
+    def track(self, f):
         """Decorate a joinpoint (function)."""
 
         def g(*args, **kwargs):
